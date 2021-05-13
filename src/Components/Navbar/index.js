@@ -1,22 +1,31 @@
-import { useHistory } from "react-router"
-import { Link } from "react-router-dom"
-import { Button } from "../Button"
 import { SearchBox } from "../SearchBox"
 import { StyledNavBar, NavSection, StyledLink, StyledLogo } from "./styles"
 import logo from './Logo2.png'
+import { useDispatch } from "react-redux"
+import { useHistory } from "react-router"
 
 export const NavBar = function() {
-  const history = useHistory()
   const token = localStorage.getItem('token')
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  function handleClick(){
+
+    dispatch({type: 'USER_LOGOUT'})
+    localStorage.clear()
+    history.push('/')
+  }
   return(
     <StyledNavBar>
       <NavSection>
-        {!token && <StyledLink to='/'>Ingresar</StyledLink>}
-        {!token && <StyledLink to='/'>Registrarse</StyledLink>}
+        {!token && <StyledLink to='/login'>Ingresar</StyledLink>}
+        {!token && <StyledLink to='/signup'>Registrarse</StyledLink>}
         <StyledLink to='/'>Categorías</StyledLink>
-        <StyledLogo src={logo} />
+        <StyledLink to='/'><StyledLogo src={logo} /></StyledLink>
         {token && <StyledLink to='/'>Mis Transacciones</StyledLink>}
+        {token && <StyledLink to='/sellproduct'>Vender</StyledLink>}
         <SearchBox />
+        {token && <button type='button' onClick={handleClick}>Cerrar Sesión</button>}
       </NavSection>
     </StyledNavBar>
   )
