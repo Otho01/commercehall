@@ -3,8 +3,6 @@ import { useEffect } from "react"
 import { changeCategory, changeError } from "../../store/checkboxReducer"
 import { useDispatch, useSelector } from "react-redux"
 
-
-
 function useApi() {
   const {
     value,
@@ -38,7 +36,7 @@ function useApi() {
     return () => {
       
     }
-  })
+  }, )
   
   return { categories, value, error }
 }
