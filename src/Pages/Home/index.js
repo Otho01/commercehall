@@ -1,11 +1,13 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { useHistory } from "react-router"
-import { NavBar } from "../../Components/Navbar"
-import { ProductPicture } from "../../Components/ProductPicture"
-import { changeProducts } from "../../store/productReducer"
 import { StyledLink } from "./styles"
+import { useEffect, useState } from "react"
+import { useHistory } from "react-router"
+import { Cart } from "../../Components/Cart"
+import { NavBar } from "../../Components/Navbar"
+import { useDispatch, useSelector } from "react-redux"
+import { ProductPicture } from "../../Components/ProductPicture"
+import { addToCart, changeProducts } from "../../store/productReducer"
+
 
 function useApi() {
   const { products } = useSelector(({productReducer}) => ({
@@ -23,7 +25,6 @@ function useApi() {
           method: 'GET',
           baseURL: process.env.REACT_APP_SERVER_URL,
           url: '/products',
-          
         })
         dispatch(changeProducts(data))
       }catch(error) {
@@ -43,14 +44,20 @@ function useApi() {
   
  export const HomePage = function() {
    const history = useHistory()
-
+   const dispatch = useDispatch()
+   
    function handleClick(prod)  {
      history.push(`/productinfo/${prod._id}`)
    }
-  
+
+   const handleAddToCart = prod => {
+    dispatch(addToCart(prod))
+  }
+
     const { products } = useApi()
     return (
       <section>
+        <Cart />
         <NavBar />
         {!!products && products.length > 0 && products.map((prod, i) => (
           <section>
@@ -63,6 +70,13 @@ function useApi() {
                 price={prod.price}
               />
             </StyledLink>
+            <button
+              key={i}
+              type='button'
+              onClick={() => handleAddToCart(prod)}
+            >
+              Agregar al carrito
+            </button>
           </section>
         ))}
       </section>

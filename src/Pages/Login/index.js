@@ -28,7 +28,8 @@ export const Login = function() {
         }
       })
       localStorage.setItem('token', data.token)
-      history.push('/loggedhome')
+      localStorage.setItem('userId', data.userId)
+      history.push(`/loggedhome/${data.userId}`)
     }catch(error) {
       dispatch(changeError(error))
     }

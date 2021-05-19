@@ -6,5 +6,5 @@ export const StyledMain = styled.main`
   grid-template-columns: repeat(4, 25%);
 `
 export const StyledLink = styled(Link)`
-
+  
 `

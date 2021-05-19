@@ -1,22 +1,26 @@
 import axios from "axios";
 import React from 'react'
 import { useEffect, useState } from "react";
+import Badge from '@material-ui/core/Badge'
+import Drawer from '@material-ui/core/Drawer'
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { NavBar } from "../../Components/Navbar";
-import { ProductPicture } from "../../Components/ProductPicture";
-import { changeProducts } from "../../store/productReducer";
+import { addToCart, changeProducts } from "../../store/productReducer";
 import { StyledSection } from "./styles";
+import { Cart } from "../../Components/Cart";
 
 export const ProductInfo = function() {
+  const dispatch = useDispatch()
+  const [openCart, setOpenCart] = useState(false)
   function useApi() {
-    const { products } = useSelector(({productReducer}) => ({
+    const { products, cart } = useSelector(({productReducer}) => ({
       products: productReducer.products,
+      cart: productReducer.cart,
     }))
 
-    const [error, setError] = useState()
     const { id } = useParams()
-
     const dispatch = useDispatch()
   
     useEffect(() => {
@@ -29,35 +33,44 @@ export const ProductInfo = function() {
           })
           dispatch(changeProducts(data))
         }catch(error) {
-          // dispatch(setError(error))
+          
         }
       }
 
       getProducts()
   
-      return () => {
-        
-      }
-    }, [])
+    }, [cart])
     
-    return { products, id }
+    return { products, id, cart }
   }
 
-  const { products, id} = useApi()
+  
+  const handleAddToCart = prod => (
+    dispatch(addToCart(prod)) 
+  )
+
+  const { products, id, cart} = useApi()
   return(
     <React.Fragment>
-    <NavBar />
-    {!!products && products.length > 0 && products.map((prod, i) => {
-      return products[i]._id === id ?  
-        <StyledSection>
-          <img src={prod.productPictures} />
-          <p>{prod.name}</p>
-          <p>{prod.price}</p>
-        </StyledSection>
-      : 
-        ''
-     }
-     )}
+      <NavBar />
+      <Cart />
+      {!!products && products.length > 0 && products.map((prod, i) => {
+        return products[i]._id === id ?  
+          <StyledSection>
+            <img src={prod.productPictures} />
+            <p>{prod.name}</p>
+            <p>{prod.price}</p>
+            <button
+              onClick={() => handleAddToCart(prod)}
+            >
+              Agregar al carrito
+            </button>
+          </StyledSection>
+          : 
+          ''
+        }
+      )
+      }
   </React.Fragment>
   )
 }

@@ -25,18 +25,14 @@ function useApi() {
           url: '/categories',
         })
         dispatch(changeCategory(data))
-        console.log(data)
       } catch(error){
         dispatch(changeError(error))
       }
     }
 
     getCategories()
-
-    return () => {
-      
-    }
-  }, )
+    
+  }, [])
   
   return { categories, value, error }
 }
@@ -47,7 +43,7 @@ export function Categories({changect, checked}) {
   return (
     <section>
       {!!categories && categories.length > 0 && categories.map((cat, i) => (
-        <section>
+        <section key={i}>
         <input 
           type='radio'
           key={`chk-${i}`}
@@ -57,7 +53,7 @@ export function Categories({changect, checked}) {
           onChange={changect}
           checked={checked === cat.name}
         />
-        <label htmlFor={cat.name}>{cat.name}</label>
+        <label htmlFor={cat.name} key={i}>{cat.name}</label>
         </section>
       ))}
     </section>

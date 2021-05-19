@@ -3,6 +3,7 @@ import { signUpReducer } from './signUpReducer'
 import { loginReducer } from './loginReducer'
 import { productReducer } from './productReducer'
 import { checkboxReducer } from './checkboxReducer'
+import { contactReducer } from './contactReducer'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 
@@ -11,6 +12,7 @@ const appReducer = combineReducers({
   loginReducer,
   checkboxReducer,
   productReducer,
+  contactReducer,
 })
 
 const rootReducer = (state, action) => {

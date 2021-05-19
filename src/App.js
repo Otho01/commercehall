@@ -6,6 +6,7 @@ import { SellProduct } from './Pages/SellProduct';
 import { SignUp } from './Pages/SignUp';
 import { LoggedHome } from './Pages/LoggedHome'
 import { ProductInfo } from './Pages/ProductInfo';
+import { ContactInfoPage, contactInfoPage } from './Pages/ContactInfoPage'
 
 function PrivateRoute({children, ...rest}) {
   const token = localStorage.getItem('token')
@@ -31,8 +32,11 @@ function App() {
         <PrivateRoute exact path="/sellproduct">
           <SellProduct />
         </PrivateRoute>
-        <PrivateRoute exact path="/loggedhome">
+        <PrivateRoute exact path="/loggedhome/:id">
           <LoggedHome />
+        </PrivateRoute>
+        <PrivateRoute exact path="/contactinfo/:id">
+          <ContactInfoPage />
         </PrivateRoute>
       </Switch>
     </Router>
