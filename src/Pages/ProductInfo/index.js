@@ -1,23 +1,20 @@
-import axios from "axios";
+import axios from "axios"
 import React from 'react'
-import { useEffect, useState } from "react";
-import Badge from '@material-ui/core/Badge'
-import Drawer from '@material-ui/core/Drawer'
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { NavBar } from "../../Components/Navbar";
-import { addToCart, changeProducts } from "../../store/productReducer";
-import { StyledSection } from "./styles";
-import { Cart } from "../../Components/Cart";
+import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useParams } from "react-router"
+import { NavBar } from "../../Components/Navbar"
+import { addToCart, changeAmount, changeProducts } from "../../store/productReducer"
+import { StyledSection } from "./styles"
+import { Cart } from "../../Components/Cart"
 
 export const ProductInfo = function() {
   const dispatch = useDispatch()
-  const [openCart, setOpenCart] = useState(false)
   function useApi() {
-    const { products, cart } = useSelector(({productReducer}) => ({
+    const { products, cart, amount } = useSelector(({productReducer}) => ({
       products: productReducer.products,
       cart: productReducer.cart,
+      amount: productReducer.amount,
     }))
 
     const { id } = useParams()
@@ -31,7 +28,8 @@ export const ProductInfo = function() {
             baseURL: process.env.REACT_APP_SERVER_URL,
             url: '/products',
           })
-          dispatch(changeProducts(data))
+          const datos = data.map(product => ({...product, amount: 0}))
+          dispatch(changeProducts(datos))
         }catch(error) {
           
         }
@@ -41,19 +39,20 @@ export const ProductInfo = function() {
   
     }, [cart])
     
-    return { products, id, cart }
+    return { products, id, cart, amount }
   }
 
   
-  const handleAddToCart = prod => (
-    dispatch(addToCart(prod)) 
-  )
+  const handleAddToCart = function(prod) {
+    dispatch(addToCart(prod))
+  }
 
-  const { products, id, cart} = useApi()
-  return(
+  const { products, id, cart, amount} = useApi()
+
+   return(
     <React.Fragment>
       <NavBar />
-      <Cart />
+      <Cart quantity={amount} />
       {!!products && products.length > 0 && products.map((prod, i) => {
         return products[i]._id === id ?  
           <StyledSection>
@@ -68,8 +67,7 @@ export const ProductInfo = function() {
           </StyledSection>
           : 
           ''
-        }
-      )
+        })
       }
   </React.Fragment>
   )
