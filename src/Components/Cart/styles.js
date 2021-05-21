@@ -7,3 +7,13 @@ export const StyledButton = styled(IconButton)`
   right: 20px;
   top: 20px;
 `
+export const Wrapper = styled.section`
+  
+`
+
+export const StyledSection = styled.section`
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  
+`

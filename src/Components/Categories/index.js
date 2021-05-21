@@ -5,11 +5,9 @@ import { useDispatch, useSelector } from "react-redux"
 
 function useApi() {
   const {
-    value,
     error,
     categories,
   } = useSelector(({checkboxReducer}) => ({
-    value: checkboxReducer.value,
     error: checkboxReducer.error,
     categories: checkboxReducer.categories,
   }))
@@ -34,11 +32,11 @@ function useApi() {
     
   }, [])
   
-  return { categories, value, error }
+  return { categories, error }
 }
 
 export function Categories({changect, checked}) {
-  const { categories, value, error } = useApi()
+  const { categories, error } = useApi()
   if(error) return <p>Algo salió mal!</p> 
   return (
     <section>

@@ -33,7 +33,7 @@ function useApi() {
 }
 
 
-export const NavBar = function({}) {
+export const NavBar = function() {
   const { userId, UserNames } = useApi()
   const token = localStorage.getItem('token')
   const dispatch = useDispatch()
@@ -61,9 +61,9 @@ export const NavBar = function({}) {
         <StyledLink to='/'><StyledLogo src={logo} /></StyledLink>
         {!!UserNames && UserNames.length > 0 && UserNames.map((usr, i) => {
           return usr._id === userId ?
-            <section>
-              <p key={i}>{`Hola ${usr.name}!`}</p>
-              <Link onClick={handleClickName}>{`Dirección de envío: ${usr.address}`}</Link>
+            <section key={`navsect-${i}`}>
+              <p key={`p-${i}`}>{`Hola ${usr.name}!`}</p>
+              <Link onClick={handleClickName} key={`navlink-${i}`} >{`Dirección de envío: ${usr.address}`}</Link>
             </section>
           : 
             ''

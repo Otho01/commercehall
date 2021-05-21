@@ -31,10 +31,8 @@ export function addToCart(value) {
   }
 }
 const initialSate = {
-  products: {},
+  products: [],
   cart: [],
-  amount: 0,
-  total: 0,
 }
 
 export function productReducer(state = initialSate, action) {
@@ -44,24 +42,20 @@ export function productReducer(state = initialSate, action) {
         ...state,
         products: action.payload,
       }
-    case ADD_TO_CART:
-      return {
-        ...state,
-        cart: [
-          ...state.cart,
-          action.payload
-        ]
-      }
-    case CHANGE_AMOUNT:
-      return {
-        ...state,
-        amount: action.payload,
-      }
-    case CHANGE_TOTAL:
-      return {
-        ...state,
-        total: action.payload,
-      }
+      case ADD_TO_CART:
+        const product = action.payload
+        const index = state.cart.find(p => p.product._id === product._id)
+        if (index) {
+          return {
+            ...state,
+            cart: state.cart.map(p => p.product._id === product._id ? { product: p.product, amount: p.amount + 1 } : p)
+          }
+        } else {
+          return {
+            ...state,
+            cart: [...state.cart, { product, amount: 1 }]
+          }
+        }
     default:
       return state
   }

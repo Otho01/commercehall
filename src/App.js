@@ -6,7 +6,7 @@ import { SellProduct } from './Pages/SellProduct';
 import { SignUp } from './Pages/SignUp';
 import { LoggedHome } from './Pages/LoggedHome'
 import { ProductInfo } from './Pages/ProductInfo';
-import { ContactInfoPage, contactInfoPage } from './Pages/ContactInfoPage'
+import { ContactInfoPage } from './Pages/ContactInfoPage'
 
 function PrivateRoute({children, ...rest}) {
   const token = localStorage.getItem('token')

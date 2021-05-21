@@ -30,7 +30,6 @@ function useApi() {
 
 export const ContactInfoPage = function() {
   const { userId, UserNames } = useApi()
-  console.log(UserNames)
   return(
     !!UserNames && UserNames.length > 0 && UserNames.map((inf) => {
       return inf._id === userId 

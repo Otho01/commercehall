@@ -5,7 +5,7 @@ import { changeAddress, changeError, changeNatId, changePhone } from "../../stor
 import { NavBar } from "../Navbar"
 
 export const ContactInfoForm = function({nombre, correo, userId, cedula, telefono, direccion}) {
-  const { nationalid, address, phone, error } = useSelector(({contactReducer}) => ({
+  const { nationalid, address, phone } = useSelector(({contactReducer}) => ({
     nationalid: contactReducer.nationalid,
     address: contactReducer.address,
     phone: contactReducer.phone,
@@ -18,7 +18,7 @@ export const ContactInfoForm = function({nombre, correo, userId, cedula, telefon
     e.preventDefault()
     setEdit(false)
     try {
-      const { data } = await axios({
+      await axios({
         method: 'PUT',
         baseURL: process.env.REACT_APP_SERVER_URL,
         url: `/users/user/${userId}`,
@@ -28,7 +28,6 @@ export const ContactInfoForm = function({nombre, correo, userId, cedula, telefon
           phone: phone,
         }
       })
-      console.log(data)
     }catch(error) {
       dispatch(changeError(error))
     }
