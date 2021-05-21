@@ -48,6 +48,7 @@ export const Cart = function() {
         onClose={() => setOpenCart(false)}
       >
         <h3>Productos en tu carrito</h3>
+        <p>Total de tu carrito: {getCartTotal(cart)}</p>
           {!!cart && cart.length > 0 && cart.map(product => 
             <Wrapper>
               <StyledSection key={product.product._id}>
@@ -57,7 +58,6 @@ export const Cart = function() {
                 <p>Precio {product.product.price * product.amount}</p>
                 <p>Cantidad: {product.amount}</p>
               </StyledSection>
-              <p>Total de tu carrito: {getCartTotal(cart)} </p>
             </Wrapper>
           )}
       </Drawer>
