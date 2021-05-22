@@ -1,7 +1,7 @@
 import axios from "axios"
 import { StyledLink } from "./styles"
 import { useEffect } from "react"
-import { useHistory } from "react-router"
+import { handlePayment } from '../../Components/Cart'
 import { Cart } from "../../Components/Cart"
 import { NavBar } from "../../Components/Navbar"
 import { useDispatch, useSelector } from "react-redux"
@@ -45,12 +45,41 @@ function useApi() {
 }
   
  export const HomePage = function() {
-   const history = useHistory()
-   const dispatch = useDispatch()
    
-   function handleClick(prod)  {
-     history.push(`/productinfo/${prod._id}`)
-   }
+   const dispatch = useDispatch()
+
+   function handlePayment(e) {
+
+    const handler = window.ePayco.checkout.configure({
+      key: process.env.REACT_APP_EPAYCO_PUBLIC_KEY,
+      test: true
+    })
+  
+    const data = {
+      external: 'false',
+      autoclick: 'false',
+  
+      amount: '20000',
+      tax: '0',
+      tax_base: '0',
+      name: 'carrito de compras',
+      description: 'Productos del carrito',
+      currency: 'cop',
+  
+      country: 'CO',
+      lang: 'es',
+  
+      invoice: '1',
+  
+      // response:
+  
+     
+      email_billing: 'luis@gmail.com',
+  
+      methodsDisable: [ 'CASH', 'SP', 'PSE', 'DP' ],
+    }
+  handler.open(data)
+  }
 
   const handleAddToCart = function(prod) {
     dispatch(addToCart(prod))
@@ -63,7 +92,7 @@ function useApi() {
         <Cart />
         {!!products && products.length > 0 && products.map((prod, i) => (
           <section key={`sctn-${i}`} >
-            <StyledLink key={`slink-${i}`} onClick={() => handleClick(prod)}
+            <StyledLink key={`slink-${i}`}  to={`/productinfo/${prod._id}`}
             >
               <ProductPicture
                 key={`pic-${i}`}
@@ -78,6 +107,12 @@ function useApi() {
               onClick={() => handleAddToCart(prod)}
             >
               Agregar al carrito
+            </button>
+            <button
+              type='button'
+              onClick={handlePayment}
+            >
+              Proceder al pago
             </button>
           </section>
         ))}
