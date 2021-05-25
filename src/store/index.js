@@ -1,9 +1,10 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { signUpReducer } from './signUpReducer'
 import { loginReducer } from './loginReducer'
-import { productReducer } from './productReducer'
+import { cartReducer } from './cartReducer'
 import { checkboxReducer } from './checkboxReducer'
 import { contactReducer } from './contactReducer'
+import { transactionReducer } from './transactionReducer'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 
@@ -11,8 +12,9 @@ const appReducer = combineReducers({
   signUpReducer,
   loginReducer,
   checkboxReducer,
-  productReducer,
+  cartReducer,
   contactReducer,
+  transactionReducer,
 })
 
 const rootReducer = (state, action) => {

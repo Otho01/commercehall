@@ -1,7 +1,15 @@
-export const Button = function({children}) {
+import { StyledButton } from './styles'
+
+export const CustomButton = function({children, OnClick, Color, Variant, Styles}) {
   return(
-    <button>
+    <StyledButton
+      style={Styles}
+      type='button'
+      variant={Variant}
+      onClick={OnClick}
+      color={Color}
+    >
       { children } 
-    </button>
+    </StyledButton>
   )
 }

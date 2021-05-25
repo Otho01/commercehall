@@ -6,5 +6,5 @@ export const StyledImg = styled.img`
 `
 export const StyledSection = styled.section`
   max-width: 260px;
-  background-color: #fcf7f7;
+  background-color: white;
 `

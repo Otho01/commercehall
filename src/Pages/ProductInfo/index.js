@@ -4,17 +4,16 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router"
 import { NavBar } from "../../Components/Navbar"
-import { addToCart, changeAmount, changeProducts } from "../../store/productReducer"
+import { addToCart, changeProducts } from "../../store/cartReducer"
 import { StyledSection } from "./styles"
 import { Cart } from "../../Components/Cart"
 
 export const ProductInfo = function() {
   const dispatch = useDispatch()
   function useApi() {
-    const { products, cart, amount } = useSelector(({productReducer}) => ({
-      products: productReducer.products,
-      cart: productReducer.cart,
-      amount: productReducer.amount,
+    const { products, cart, amount } = useSelector(({cartReducer}) => ({
+      products: cartReducer.products,
+      cart: cartReducer.cart,
     }))
 
     const { id } = useParams()

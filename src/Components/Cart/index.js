@@ -1,37 +1,50 @@
 import { useState } from 'react'
-import { StyledButton, StyledSection, Wrapper } from './styles'
+import { IncreaseButton, StyledButtonID, StyledSection, Wrapper } from './styles'
 import Badge from '@material-ui/core/Badge'
 import Drawer from '@material-ui/core/Drawer'
-import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+import Button from '@material-ui/core/Button'
 import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart, openCloseCart, removeFromCart } from '../../store/cartReducer'
+import { CustomButton } from '../Button'
+
 
 export const Cart = function() {
-  const [openCart, setOpenCart] = useState(false)
   
-  const { cart, address, phone, nationalId, name } = useSelector(({productReducer, contactReducer, signUpReducer}) => ({
+  const dispatch = useDispatch()
+  
+  const { cart, address, phone, nationalId, name, openCart } = useSelector(({cartReducer, contactReducer, signUpReducer}) => ({
     name: signUpReducer.name,
-    cart: productReducer.cart,
+    cart: cartReducer.cart,
     phone: contactReducer.phone,
-    total: productReducer.total,
-    amount: productReducer.amount,
+    total: cartReducer.total,
+    openCart: cartReducer.openCart,
     address: contactReducer.address,
     nationalId: contactReducer.nationalId,
   }))
   const token = localStorage.getItem('token')
   const history = useHistory()
 
-  const getCartTotal = (cartItem) => {
-    return cartItem.reduce((ack, cv) => {
-      return ack + cv.product.price * cv.amount
-    }, 0)
+  const getCartTotalPrice = cartItem => {
+      return cartItem.reduce((ack, cv) => {
+          const ctotal = !!cv.product && cv.product.price * cv.amount + ack
+          return ctotal
+      }, 0)
   }
 
-  const ctotal = getCartTotal(cart)
+
+  const ctotal = getCartTotalPrice(cart)
+
   console.log(ctotal)
-  const cartTotalItems = product => product.reduce((ack, cv) => {
-    return ack + cv.amount
-  }, 0)
+  console.log(getCartTotalPrice(cart))
+  
+  const handleAddToCart = function(product) {
+    dispatch(addToCart(product))
+  }
+
+  const handleRemoveFromCart = function(product) {
+    dispatch(removeFromCart(product))
+  }
 
   function handlePayment(e) {
     const handler = window.ePayco.checkout.configure({
@@ -55,8 +68,8 @@ export const Cart = function() {
   
       invoice: '1',
   
-      // response:
-      
+      response: `${process.env.REACT_APP_BASE_URL}/transactionresult`,
+
       name_billing: name,
       address_billing: address,
       type_doc_billing: 'CC',
@@ -69,37 +82,53 @@ export const Cart = function() {
 
     !!token ? handler.open(data) : history.push('/login')
   }
-
+  
+ 
   return(
     <>
-      <StyledButton onClick={() => setOpenCart(true)}>
-        <Badge badgeContent={cartTotalItems(cart)} color='error'>
-          <AddShoppingCartIcon />
-        </Badge>
-      </StyledButton>
       <Drawer
         anchor='right'
         open={openCart}
-        onClose={() => setOpenCart(false)}
-        variant= 'persistent'
+        onClose={() => dispatch(openCloseCart(false))}
+        variant='persistent'
       >
         <h3>Productos en tu carrito</h3>
-        <p>Total de tu carrito: {getCartTotal(cart)}</p>
+        <p>Total de tu carrito: {getCartTotalPrice(cart)}</p>
         {!!cart && cart.length > 0 &&
-        <button
+        <CustomButton
           type='button'
-          onClick={handlePayment}
+          OnClick={handlePayment}
         >
           Proceder al pago
-        </button>}
-          {!!cart && cart.length > 0 && cart.map(product => 
+        </CustomButton>}
+        <CustomButton
+          type='button'
+          OnClick={() => dispatch(openCloseCart(false))}
+        >
+          Cerrar carrito
+        </CustomButton>
+          {!!cart && cart.length > 0 && cart.map((product) =>
             <Wrapper>
-              <StyledSection key={product.product._id}>
-                <img src={product.product.productPictures} alt='product'/> 
-                <p>{product.product.name}</p>
-                <p>Descripción: {product.product.description}</p>
-                <p>Precio {product.product.price * product.amount}</p>
-                <p>Cantidad: {product.amount}</p>
+              <StyledSection key={!!product.product && product.product._id}>
+                {!!product.product && <img src={product.product.productPictures} alt='product'/>}
+                {!!product.product && <p>{product.product.name}</p>}
+                {!!product.product && <p>Descripción: {product.product.description}</p>}
+                {!!product.product && <p>Precio {product.product.price * product.amount}</p>}
+              {!!product.product && cart.length > 0 &&
+                <CustomButton
+                  type='button'
+                  OnClick={() => handleRemoveFromCart(product)}
+                >
+                  -
+                </CustomButton>}
+                {!!product.amount && <p className='paragraphs'>{product.amount}</p>}
+                {!!product.product && cart.length > 0 &&
+                <CustomButton
+                  type='button'
+                  OnClick={() => handleAddToCart(product.product)}
+                >
+                  +
+                </CustomButton>}
               </StyledSection>
             </Wrapper>
           )}

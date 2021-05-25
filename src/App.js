@@ -7,6 +7,7 @@ import { SignUp } from './Pages/SignUp';
 import { LoggedHome } from './Pages/LoggedHome'
 import { ProductInfo } from './Pages/ProductInfo';
 import { ContactInfoPage } from './Pages/ContactInfoPage'
+import { TransactionResult } from './Pages/TransactionResult';
 
 function PrivateRoute({children, ...rest}) {
   const token = localStorage.getItem('token')
@@ -37,6 +38,9 @@ function App() {
         </PrivateRoute>
         <PrivateRoute exact path="/contactinfo/:id">
           <ContactInfoPage />
+        </PrivateRoute>
+        <PrivateRoute exact path="/transactionresult">
+          <TransactionResult />
         </PrivateRoute>
       </Switch>
     </Router>

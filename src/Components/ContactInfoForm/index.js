@@ -1,8 +1,11 @@
 import axios from "axios"
 import { useState } from "react"
+import { CustomButton } from '../../Components/Button'
+import { NavBar } from "../Navbar"
+import { Dialog, DialogTitle } from '@material-ui/core'
 import { useDispatch, useSelector } from "react-redux"
 import { changeAddress, changeError, changeNatId, changePhone } from "../../store/contactReducer"
-import { NavBar } from "../Navbar"
+import { StyledInputContact, StyledParagraph, StyledLabelContactForm } from "./styles"
 
 export const ContactInfoForm = function({nombre, correo, userId, cedula, telefono, direccion}) {
   const { nationalid, address, phone } = useSelector(({contactReducer}) => ({
@@ -11,12 +14,16 @@ export const ContactInfoForm = function({nombre, correo, userId, cedula, telefon
     phone: contactReducer.phone,
     error: contactReducer.error,
   }))
-  const [edit, setEdit] = useState(false)
+
+  const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
+
+  function handleClose() {
+    setOpen(false)
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    setEdit(false)
     try {
       await axios({
         method: 'PUT',
@@ -31,103 +38,115 @@ export const ContactInfoForm = function({nombre, correo, userId, cedula, telefon
     }catch(error) {
       dispatch(changeError(error))
     }
+    document.location.reload(true)
+    return setOpen(false)
   }
 
-  if(edit === true) {
+  if(open === true) {
     return(
       <>
         <NavBar />
-        <form onSubmit={handleSubmit}>
-          <label htmlFor='nombre'>Nombre</label>
-          <p
-            id='nombre'
-          >
-            {nombre}
-          </p>
-          <label htmlFor='correo'>Correo</label>
-          <p
-            id='correo'
-          >
-            {correo}
-          </p>
-          <label htmlFor='cedula'>Cédula</label>
-          <input
-            type='text'
-            id='cedula'
-            value={nationalid}
-            onChange={e => dispatch(changeNatId(e.target.value))}
-          />
-          <label htmlFor='direccion'>Dirección</label>
-          <input
-            type='text'
-            value={address}
-            id='direccion'
-            onChange={e => dispatch(changeAddress(e.target.value))}
-          />
-          <label htmlFor='telefono'>Teléfono</label>
-          <input
-            type='text'
-            value={phone}
-            id='telefono'
-            onChange={e => dispatch(changePhone(e.target.value))}
-          />
-          <button
-            type='submit'
-            onClick={handleSubmit}
-          >
-            Guardar Información
-          </button>
-        </form>
-        <button
-            type='button'
-            onClick={(e) => setEdit(false)}
-          >
-            Cancelar
-          </button>
+        <Dialog 
+          repositionOnUpdate={false}
+          style={{ padding: '20px 20px 20px 20px' }}
+          fullWidth
+          open={open}
+          onClose={handleClose}
+          onSubmit={handleSubmit}
+        >
+          <DialogTitle>Ingresa tu información</DialogTitle>
+            <StyledLabelContactForm htmlFor='nombre'>Nombre</StyledLabelContactForm>
+            <StyledParagraph
+              id='nombre'
+            >
+              {nombre}
+            </StyledParagraph>
+            <StyledLabelContactForm htmlFor='correo'>Correo</StyledLabelContactForm>
+            <StyledParagraph
+              id='correo'
+            >
+              {correo}
+            </StyledParagraph>
+            <StyledInputContact
+              style={{ margin: '0px 30px 0px 30px' }}
+              margin='dense'
+              type='text'
+              id='cedula'
+              value={nationalid}
+              label='Cédula'
+              onChange={e => dispatch(changeNatId(e.target.value))}
+            />
+            <StyledInputContact
+              style={{ margin: '0px 30px 0px 30px' }}
+              type='text'
+              value={address}
+              id='direccion'
+              label='Dirección'
+              onChange={e => dispatch(changeAddress(e.target.value))}
+            />
+            <StyledInputContact
+              style={{ margin: '0px 30px 0px 30px' }}
+              type='text'
+              value={phone}
+              id='telefono'
+              label='Teléfono'
+              onChange={e => dispatch(changePhone(e.target.value))}
+            />
+            <CustomButton
+              Styles={{ margin: '0px 0px 0px 200px'}}
+              Color='primary'
+              type='submit'
+              OnClick={handleSubmit}
+            >
+              Guardar Información
+            </CustomButton>
+        </Dialog>
       </>
     )
-  }else if(edit === false) {
+  }else if(open === false) {
     return(
       <>
         <NavBar />
         <form>
-          <label htmlFor='nombre'>Nombre</label>
-          <p
+          <StyledLabelContactForm htmlFor='nombre'>Nombre</StyledLabelContactForm>
+          <StyledParagraph
             id='nombre'
           >
             {nombre}
-          </p>
-          <label htmlFor='correo'>Correo</label>
-          <p
+          </StyledParagraph>
+          <StyledLabelContactForm htmlFor='correo'>Correo</StyledLabelContactForm>
+          <StyledParagraph
             id='correo'
           >
             {correo}
-          </p>
-          <label htmlFor='cedula'>Cédula</label>
-          <p 
+          </StyledParagraph>
+          <StyledLabelContactForm htmlFor='cedula'>Cédula</StyledLabelContactForm>
+          <StyledParagraph 
             id='cedula' 
           >
             {cedula}
-          </p>
-          <label htmlFor='direccion'>Dirección</label>
-          <p 
+          </StyledParagraph>
+          <StyledLabelContactForm htmlFor='direccion'>Dirección</StyledLabelContactForm>
+          <StyledParagraph 
             id='direccion'
           >
             {direccion}
-          </p>
-          <label htmlFor='telefono'>Teléfono</label>
-          <p
+          </StyledParagraph>
+          <StyledLabelContactForm htmlFor='telefono'>Teléfono</StyledLabelContactForm>
+          <StyledParagraph
             id='telefono'
           >
             {telefono}
-          </p>
+          </StyledParagraph>
         </form>
-        <button
+        <CustomButton
+            Styles={{ margin: '0px 0px 0px 30px'}}
             type='button'
-            onClick={() => setEdit(true)}
+            OnClick={() => setOpen(true)}
+            Variant='outlined'
           >
             Editar
-        </button>
+        </CustomButton>
       </>
     )
   }

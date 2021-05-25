@@ -1,20 +1,18 @@
 import axios from "axios"
-import { StyledLink } from "./styles"
 import { useEffect } from "react"
-import { handlePayment } from '../../Components/Cart'
 import { Cart } from "../../Components/Cart"
 import { NavBar } from "../../Components/Navbar"
 import { useDispatch, useSelector } from "react-redux"
+import { StyledButtonHome, StyledLink, StyledSectionHome } from "./styles"
 import { ProductPicture } from "../../Components/ProductPicture"
-import { addToCart, changeProducts } from "../../store/productReducer"
+import { addToCart, changeProducts } from "../../store/cartReducer"
+import { CustomButton } from "../../Components/Button"
 
 
 function useApi() {
-  const { products, cart, total } = useSelector(({productReducer}) => ({
-    products: productReducer.products,
-    total: productReducer.total,
-    cart: productReducer.cart,
-    amount: productReducer.amount,
+  const { products, cart } = useSelector(({cartReducer}) => ({
+    products: cartReducer.products,
+    cart: cartReducer.cart,
   }))
   
   const dispatch = useDispatch()
@@ -41,7 +39,7 @@ function useApi() {
     }
   }, [cart])
   
-  return { products, cart, total }
+  return { products, cart }
 }
   
  export const HomePage = function() {
@@ -85,13 +83,13 @@ function useApi() {
     dispatch(addToCart(prod))
   }
     
-    const { products, cart } = useApi()
+    const { products } = useApi()
     return (
       <section>
         <NavBar />
         <Cart />
         {!!products && products.length > 0 && products.map((prod, i) => (
-          <section key={`sctn-${i}`} >
+          <StyledSectionHome key={`sctn-${i}`} >
             <StyledLink key={`slink-${i}`}  to={`/productinfo/${prod._id}`}
             >
               <ProductPicture
@@ -101,20 +99,21 @@ function useApi() {
                 price={prod.price}
               />
             </StyledLink>
-            <button
+            <CustomButton
               key={`btn-${i}`}
               type='button'
-              onClick={() => handleAddToCart(prod)}
+              OnClick={() => handleAddToCart(prod)}
             >
               Agregar al carrito
-            </button>
-            <button
+            </CustomButton>
+            <CustomButton
+              color='primary'
               type='button'
-              onClick={handlePayment}
+              OnClick={handlePayment}
             >
-              Proceder al pago
-            </button>
-          </section>
+              Comprar ahora
+            </CustomButton>
+          </StyledSectionHome>
         ))}
       </section>
     )

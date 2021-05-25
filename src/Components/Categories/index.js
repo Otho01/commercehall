@@ -1,7 +1,9 @@
 import axios from "axios"
 import { useEffect } from "react"
-import { changeCategory, changeError } from "../../store/checkboxReducer"
+import { Radio } from '@material-ui/core'
 import { useDispatch, useSelector } from "react-redux"
+import { changeCategory, changeError } from "../../store/checkboxReducer"
+import { StyledInputCategory, StyledSectionCategory } from "./styles"
 
 function useApi() {
   const {
@@ -35,14 +37,17 @@ function useApi() {
   return { categories, error }
 }
 
-export function Categories({changect, checked}) {
+export function Categories({ changect, checked, gridPosition }) {
   const { categories, error } = useApi()
   if(error) return <p>Algo salió mal!</p> 
   return (
     <section>
       {!!categories && categories.length > 0 && categories.map((cat, i) => (
-        <section key={i}>
-        <input 
+        <StyledSectionCategory
+          cuartaColumna
+          key={i}
+        >
+        <Radio 
           type='radio'
           key={`chk-${i}`}
           name='radio'
@@ -50,9 +55,10 @@ export function Categories({changect, checked}) {
           value={cat.name}
           onChange={changect}
           checked={checked === cat.name}
+          
         />
         <label htmlFor={cat.name} key={i}>{cat.name}</label>
-        </section>
+        </StyledSectionCategory>
       ))}
     </section>
   )

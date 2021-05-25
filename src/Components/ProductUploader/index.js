@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useState } from 'react'
-import { Categories } from '../Categories'
 import { NavBar } from '../Navbar'
+import { Categories } from '../Categories'
+import { StyledInputUploader, StyledLabelUploader, StyledTextArea, StyledFormUploader, StyledSectionUploader, StyledImg } from './styles'
 
 export function ProductUploader() {
   const [file, setFile] = useState(null)
@@ -55,42 +56,80 @@ export function ProductUploader() {
   return (
     <>
       <NavBar/>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='file'>Agregar Foto</label>
-        <input
+      <StyledFormUploader onSubmit={handleSubmit}>
+        <StyledLabelUploader 
+          needsBottomMargin
+          primerColumna
+          htmlFor='file'
+        >
+            Agregar Foto
+        </StyledLabelUploader>
+        <StyledInputUploader
+          variant='filled'
+          primerColumna
           type='file'
           accept='image/*'
           name='file'
           id='file'
           onChange={handleChange}
         />
-        {preview && <img src={preview} alt='File preview' />}
-        <label htmlFor='description'>Descripción del producto</label>
-        <textarea
-          type='text'
-          name='description'
-          id='description'
-          onChange={e => setDescription(e.target.value)}
-        />
-        <label htmlFor='price'>Precio</label>
-        <input
-          type='text'
-          name='price'
-          id='price'
-          onChange={e => setPrice(e.target.value)}
-        />
-        <label htmlFor='name'>Nombre del producto</label>
-        <input
-          type='text'
-          name='name'
-          id='name'
-          onChange={e => setName(e.target.value)}
-        /> 
-        <label htmlFor='category'>Categoría</label>
-        <p>{category}</p>
-        <Categories changect={e => setCategory(e.target.value)} checked={category} />
-        <button>Enviar</button>
-      </form>
+        <StyledSectionUploader
+          primerColumna
+        >
+          {preview && <StyledImg src={preview} alt='File preview' />}
+        </StyledSectionUploader>
+        <StyledSectionUploader
+          needsMarginLeft
+          segundaColumna
+          displayContents
+        >
+          <StyledTextArea
+            segundaColumna
+            type='text'
+            name='description'
+            id='description'
+            rowsMin='5'
+            placeholder='Ingrese una descripción'
+            onChange={e => setDescription(e.target.value)}
+          />
+          <StyledInputUploader
+            style={{ marginLeft: '50px'}}
+            variant='outlined'
+            segundaColumna
+            type='text'
+            name='price'
+            id='price'
+            onChange={e => setPrice(e.target.value)}
+            placeholder='Ingrese un precio'
+          />
+          <StyledInputUploader
+            style={{marginLeft: '50px'}}
+            placeholder='Ingrese el nombre de producto'
+            variant='outlined'
+            segundaColumna
+            type='text'
+            name='name'
+            id='name'
+            onChange={e => setName(e.target.value)}
+          />
+        </StyledSectionUploader>
+        <StyledLabelUploader
+          htmlFor='category'
+          needsTopMargin
+        >
+          Categoría
+        </StyledLabelUploader>
+        <StyledSectionUploader
+          needsBotMargin
+          needsTopMargin
+        >
+          <p>{category}</p>
+          <Categories changect={e => setCategory(e.target.value)} checked={category} />
+        </StyledSectionUploader>
+        <StyledSectionUploader>
+          <button>Enviar</button>
+        </StyledSectionUploader>
+      </StyledFormUploader >
     </>
   )
 }
