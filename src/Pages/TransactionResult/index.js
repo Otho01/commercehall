@@ -1,15 +1,22 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { saveTransaction } from "../../store/transactionReducer";
 import queryString from "query-string";
 import { NavBar } from "../../Components/Navbar";
+import { StyledH2 } from "./styles";
+import { CustomButton } from "../../Components/Button";
 
 export function TransactionResult() {
   const location = useLocation()
 
   const dispatch= useDispatch()
+  const history = useHistory()
+
+  function handleGoHome() {
+    history.push('/')
+  }
 
   useEffect(() => {
     const { ref_payco } = queryString.parse(location.search)
@@ -40,13 +47,22 @@ export function TransactionResult() {
 
   return(
     <>
-      <NavBar />
       <main>
         <section>
-          <h2>Su transacción fue:</h2>
+          <StyledH2>Su transacción fue:</StyledH2>
           {!!savingTransaction && <p>Cargando resultado...</p>}
           {!!errorTransaction && <p>Error al cargar el resultado de transacción.</p>}
-          {!!transaction && !!successTransaction && <h2>{transaction.result}</h2>}
+          {!!transaction && !!successTransaction && <StyledH2 morePadding>{transaction.result}</StyledH2>}
+          {!!transaction 
+            && !!successTransaction 
+            && 
+            <CustomButton 
+              OnClick={() => handleGoHome()}
+              Styles={{marginLeft: '780px' }} 
+              Variant='outlined'
+            >
+              Volver al Inicio
+            </CustomButton>}
         </section>
       </main>
     </>

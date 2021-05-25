@@ -18,7 +18,8 @@ export const StyledSectionHome = styled.section`
   display: inline-block;
   z-index: 100;
   width: 25%;
-  margin-top: 20px;
+  margin: 20px 0 0 0;
+
 `
 export const StyledButtonHome = styled(Button)`
   margin: 2px;

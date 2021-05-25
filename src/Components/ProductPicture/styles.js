@@ -5,6 +5,5 @@ export const StyledImg = styled.img`
   margin: 10px;
 `
 export const StyledSection = styled.section`
-  max-width: 260px;
   background-color: white;
 `

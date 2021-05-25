@@ -5,14 +5,15 @@ import { NavBar } from "../../Components/Navbar"
 import { useDispatch, useSelector } from "react-redux"
 import { StyledButtonHome, StyledLink, StyledSectionHome } from "./styles"
 import { ProductPicture } from "../../Components/ProductPicture"
-import { addToCart, changeProducts } from "../../store/cartReducer"
+import { addToCart, changeFilteredData, changeProducts } from "../../store/cartReducer"
 import { CustomButton } from "../../Components/Button"
 
-
 function useApi() {
-  const { products, cart } = useSelector(({cartReducer}) => ({
+  const { products, cart, search, filteredProducts } = useSelector(({cartReducer, searchReducer}) => ({
     products: cartReducer.products,
     cart: cartReducer.cart,
+    search: searchReducer.search,
+    filteredProducts: cartReducer.filteredProducts,
   }))
   
   const dispatch = useDispatch()
@@ -39,11 +40,11 @@ function useApi() {
     }
   }, [cart])
   
-  return { products, cart }
+  return { products, cart, search, filteredProducts }
 }
   
  export const HomePage = function() {
-   
+  const { products, search, filteredProducts } = useApi()
    const dispatch = useDispatch()
 
    function handlePayment(e) {
@@ -82,39 +83,70 @@ function useApi() {
   const handleAddToCart = function(prod) {
     dispatch(addToCart(prod))
   }
-    
-    const { products } = useApi()
-    return (
-      <section>
-        <NavBar />
-        <Cart />
-        {!!products && products.length > 0 && products.map((prod, i) => (
-          <StyledSectionHome key={`sctn-${i}`} >
-            <StyledLink key={`slink-${i}`}  to={`/productinfo/${prod._id}`}
-            >
-              <ProductPicture
-                key={`pic-${i}`}
-                picture={prod.productPictures}
-                prodname={prod.name}
-                price={prod.price}
-              />
-            </StyledLink>
-            <CustomButton
-              key={`btn-${i}`}
-              type='button'
-              OnClick={() => handleAddToCart(prod)}
-            >
-              Agregar al carrito
-            </CustomButton>
-            <CustomButton
-              color='primary'
-              type='button'
-              OnClick={handlePayment}
-            >
-              Comprar ahora
-            </CustomButton>
-          </StyledSectionHome>
-        ))}
-      </section>
-    )
+  
+  console.log(filteredProducts)
+  return (
+    <section>
+      <NavBar />
+      <Cart />
+      {!search && !!products && products.length > 0 && products.map((prod, i) => (
+        <StyledSectionHome key={`sctn-${i}`} >
+          <StyledLink key={`slink-${i}`}  to={`/productinfo/${prod._id}`}
+          >
+            <ProductPicture
+              key={`pic-${i}`}
+              picture={prod.productPictures}
+              prodname={prod.name}
+              price={prod.price}
+            />
+          </StyledLink>
+          <CustomButton
+            Variant='outlined'
+            key={`btn-${i}`}
+            type='button'
+            OnClick={() => handleAddToCart(prod)}
+          >
+            Agregar al carrito
+          </CustomButton>
+          <CustomButton
+            Variant='outlined'
+            color='primary'
+            type='button'
+            OnClick={handlePayment}
+          >
+            Comprar ahora
+          </CustomButton>
+        </StyledSectionHome>
+      ))}
+      {search && !!filteredProducts && filteredProducts.length > 0 && filteredProducts.map((prod, i) => (
+        <StyledSectionHome key={`sctn-${i}`} >
+          <StyledLink key={`slink-${i}`}  to={`/productinfo/${prod._id}`}
+          >
+            <ProductPicture
+              key={`pic-${i}`}
+              picture={prod.productPictures}
+              prodname={prod.name}
+              price={prod.price}
+            />
+          </StyledLink>
+          <CustomButton
+            Variant='outlined'
+            key={`btn-${i}`}
+            type='button'
+            OnClick={() => handleAddToCart(prod)}
+          >
+            Agregar al carrito
+          </CustomButton>
+          <CustomButton
+            Variant='outlined'
+            color='primary'
+            type='button'
+            OnClick={handlePayment}
+          >
+            Comprar ahora
+          </CustomButton>
+        </StyledSectionHome>
+      ))}
+    </section>
+  )
 }

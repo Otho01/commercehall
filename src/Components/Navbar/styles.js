@@ -19,8 +19,7 @@ export const StyledLink = styled(Link)`
   height: 20px;
 `
 export const StyledLogo = styled.img`
-  margin: 0px 20px auto 20px;
-  
+  margin: -65px 20px 0 -40px;
 `
 
 export const StyledParagraph = styled.p`

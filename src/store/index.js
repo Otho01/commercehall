@@ -4,6 +4,7 @@ import { loginReducer } from './loginReducer'
 import { cartReducer } from './cartReducer'
 import { checkboxReducer } from './checkboxReducer'
 import { contactReducer } from './contactReducer'
+import { searchReducer } from './searchReducer'
 import { transactionReducer } from './transactionReducer'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
   cartReducer,
   contactReducer,
   transactionReducer,
+  searchReducer,
 })
 
 const rootReducer = (state, action) => {

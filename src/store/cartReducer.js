@@ -4,6 +4,14 @@ const CHANGE_AMOUNT = 'CHANGE_AMOUNT'
 const CHANGE_TOTAL = 'CHANGE_TOTAL'
 const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 const OPEN_CLOSE_CART = 'OPEN_CLOSE_CART'
+const CHANGE_FILTERED_DATA = 'CHANGE_FILTERED_DATA'
+
+export function changeFilteredData(value) {
+  return {
+    type: CHANGE_FILTERED_DATA,
+    payload: value
+  }
+}
 
 export function openCloseCart(value) {
   return {
@@ -48,6 +56,7 @@ export function addToCart(value) {
 }
 const initialSate = {
   products: [],
+  filteredProducts: [],
   cart: [],
   openCart: false,
 }
@@ -93,6 +102,11 @@ export function cartReducer (state = initialSate, action) {
           ...state,
           cart: [...state.cart, { product, amount: 1 }]
         }
+      }
+    case CHANGE_FILTERED_DATA:
+      return {
+        ...state,
+        filteredProducts: action.payload,
       }
     default:
       return state

@@ -24,3 +24,11 @@ export const StyledSection = styled.section`
     flex: 1;
   }
 `
+export const StyledSectionButtons = styled.section`
+  display: flex;
+  flex-direction: row;
+`
+
+export const StyledParagraphC = styled.p`
+  justify-content: left;
+`

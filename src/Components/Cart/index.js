@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IncreaseButton, StyledButtonID, StyledSection, Wrapper } from './styles'
+import { IncreaseButton, StyledButtonID, StyledSection, StyledSectionButtons, Wrapper, StyledParagraphC } from './styles'
 import Badge from '@material-ui/core/Badge'
 import Drawer from '@material-ui/core/Drawer'
 import Button from '@material-ui/core/Button'
@@ -34,9 +34,6 @@ export const Cart = function() {
 
 
   const ctotal = getCartTotalPrice(cart)
-
-  console.log(ctotal)
-  console.log(getCartTotalPrice(cart))
   
   const handleAddToCart = function(product) {
     dispatch(addToCart(product))
@@ -86,6 +83,7 @@ export const Cart = function() {
  
   return(
     <>
+      
       <Drawer
         anchor='right'
         open={openCart}
@@ -94,19 +92,23 @@ export const Cart = function() {
       >
         <h3>Productos en tu carrito</h3>
         <p>Total de tu carrito: {getCartTotalPrice(cart)}</p>
-        {!!cart && cart.length > 0 &&
-        <CustomButton
-          type='button'
-          OnClick={handlePayment}
-        >
-          Proceder al pago
-        </CustomButton>}
-        <CustomButton
-          type='button'
-          OnClick={() => dispatch(openCloseCart(false))}
-        >
-          Cerrar carrito
-        </CustomButton>
+        <StyledSectionButtons>
+          {!!cart && cart.length > 0 &&
+          <CustomButton
+            Variant='outlined'
+            type='button'
+            OnClick={handlePayment}
+          >
+            Proceder al pago
+          </CustomButton>}
+          <CustomButton
+            Variant='outlined'
+            type='button'
+            OnClick={() => dispatch(openCloseCart(false))}
+          >
+            Cerrar carrito
+          </CustomButton>
+        </StyledSectionButtons>
           {!!cart && cart.length > 0 && cart.map((product) =>
             <Wrapper>
               <StyledSection key={!!product.product && product.product._id}>
@@ -114,20 +116,24 @@ export const Cart = function() {
                 {!!product.product && <p>{product.product.name}</p>}
                 {!!product.product && <p>Descripción: {product.product.description}</p>}
                 {!!product.product && <p>Precio {product.product.price * product.amount}</p>}
-              {!!product.product && cart.length > 0 &&
-                <CustomButton
-                  type='button'
-                  OnClick={() => handleRemoveFromCart(product)}
-                >
-                  -
-                </CustomButton>}
-                {!!product.amount && <p className='paragraphs'>{product.amount}</p>}
                 {!!product.product && cart.length > 0 &&
                 <CustomButton
+                  Styles={{alignSelf: 'center'}}
+                  Variant='outlined'
                   type='button'
                   OnClick={() => handleAddToCart(product.product)}
                 >
                   +
+                </CustomButton>}
+                {!!product.amount && <StyledParagraphC className='paragraphs'>{product.amount}</StyledParagraphC>}
+                {!!product.product && cart.length > 0 &&
+                <CustomButton
+                Styles={{alignSelf: 'center'}}
+                  Variant='outlined'
+                  type='button'
+                  OnClick={() => handleRemoveFromCart(product)}
+                >
+                  -
                 </CustomButton>}
               </StyledSection>
             </Wrapper>

@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router"
 import { NavBar } from "../../Components/Navbar"
 import { addToCart, changeProducts } from "../../store/cartReducer"
-import { StyledSection } from "./styles"
+import { StyledDescription, StyledSection, SytledPInfo } from "./styles"
 import { Cart } from "../../Components/Cart"
+import { CustomButton } from "../../Components/Button"
 
 export const ProductInfo = function() {
   const dispatch = useDispatch()
@@ -56,13 +57,16 @@ export const ProductInfo = function() {
         return products[i]._id === id ?  
           <StyledSection>
             <img src={prod.productPictures} />
-            <p>{prod.name}</p>
-            <p>{prod.price}</p>
-            <button
-              onClick={() => handleAddToCart(prod)}
+            <SytledPInfo>{prod.name}</SytledPInfo>
+            <SytledPInfo>Precio: {prod.price}</SytledPInfo>
+            <CustomButton
+              Styles={{margin: '190px 0 0 0'}}
+              Variant='outlined'
+              OnClick={() => handleAddToCart(prod)}
             >
               Agregar al carrito
-            </button>
+            </CustomButton>
+            <StyledDescription>{prod.description}</StyledDescription>
           </StyledSection>
           : 
           ''

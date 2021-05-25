@@ -3,6 +3,8 @@ import { useHistory } from "react-router"
 import React from 'react'
 import axios from 'axios'
 import { changeError, changeEmail, changePassword, changePasswordConfirm, changeName } from '../../store/signUpReducer'
+import { StyledFormSignUp, StyledInputSignUp, StyledLabelSignUp, StyledSectionSignUp, WrapperSignUp } from './styles'
+import { CustomButton } from '../../Components/Button'
 
 
 export const SignUp = function() {
@@ -38,7 +40,8 @@ export const SignUp = function() {
             },
           })
           localStorage.setItem('token', data.token)
-          history.push('/loggedhome')
+          localStorage.setItem('userId', data.usrId)
+          history.push(`/loggedhome/${data.usrId}`)
         }catch(error) {
           dispatch(changeError())
         }
@@ -48,46 +51,65 @@ export const SignUp = function() {
   const dispatch = useDispatch()  
 
   return(
-    <form onSubmit={handleSubmit}>
-      <section>
-      <label htmlFor='name'>Nombre</label>
-        <input
-          type='text'
-          id='name'
-          name='name'
-          onChange={(e) => dispatch(changeName(e.target.value))}
-          value={name}
-        />
-        <label htmlFor='email'>Correo</label>
-        <input
-          type='text'
-          id='email'
-          name='email'
-          onChange={(e) => dispatch(changeEmail(e.target.value))}
-          value={email}
-        />
-        <label htmlFor='password'>Contraseña</label>
-        <input
-          type='password'
-          id='password'
-          name='password'
-          onChange={(e) => dispatch(changePassword(e.target.value))}
-          value={password}
-        />
-        <label htmlFor='passwordconfirm'>Confirmar Contraseña</label>
-        <input
-          type='password'
-          id='passwordconfirm'
-          name='passwordconfirm'
-          onChange={(e) => dispatch(changePasswordConfirm(e.target.value))}
-          value={passwordconfirm}
-        />
-        <button
-          type='submit'
-        >
-          Registrarse
-        </button>
-      </section>
-    </form>
+    <WrapperSignUp>
+      <CustomButton
+        Styles={{margin: '30px 0 0 30px'}}
+        Variant='outlined'
+        Type='button'
+        OnClick={() => history.push('/')}
+      >
+        Inicio
+      </CustomButton>
+      <StyledFormSignUp onSubmit={handleSubmit}>
+        <StyledSectionSignUp>
+        <StyledLabelSignUp htmlFor='name'>Nombre</StyledLabelSignUp>
+          <StyledInputSignUp
+            type='text'
+            id='name'
+            name='name'
+            onChange={(e) => dispatch(changeName(e.target.value))}
+            value={name}
+          />
+          <StyledLabelSignUp htmlFor='email'>Correo</StyledLabelSignUp>
+          <StyledInputSignUp
+            type='text'
+            id='email'
+            name='email'
+            onChange={(e) => dispatch(changeEmail(e.target.value))}
+            value={email}
+          />
+          <StyledLabelSignUp htmlFor='password'>Contraseña</StyledLabelSignUp>
+          <StyledInputSignUp
+            type='password'
+            id='password'
+            name='password'
+            onChange={(e) => dispatch(changePassword(e.target.value))}
+            value={password}
+          />
+          <StyledLabelSignUp htmlFor='passwordconfirm'>Confirmar Contraseña</StyledLabelSignUp>
+          <StyledInputSignUp
+            type='password'
+            id='passwordconfirm'
+            name='passwordconfirm'
+            onChange={(e) => dispatch(changePasswordConfirm(e.target.value))}
+            value={passwordconfirm}
+          />
+          <CustomButton
+            Type='submit'
+            Variant='outlined'
+          >
+            Registrarse
+          </CustomButton>
+          <StyledLabelSignUp htmlFor='passwordconfirm'>¿Ya tienes cuenta?</StyledLabelSignUp>
+          <CustomButton
+            Type='submit'
+            Variant='outlined'
+            OnClick={() => history.push('/login')}
+          >
+            Ingresa aquí
+          </CustomButton>
+        </StyledSectionSignUp>
+      </StyledFormSignUp>
+    </WrapperSignUp>
   )
 }
